@@ -198,3 +198,152 @@ gs://shailesh-ora2pg-datastrea/hrdata/
 gs://shailesh-ora2pg-datastrea/hrdata/
 
 
+#!/bin/bash
+
+
+gcloud beta compute ssh --zone "us-central1-a" "pg-on-gce"  --tunnel-through-iap --project "shailesh-1"
+
+
+
+
+
+gcloud services enable dataflow.googleapis.com
+gcloud beta dataflow flex-template run datastream-replication \
+        --project="${PROJECT_ID}" --region="us-central1" \
+        --template-file-gcs-location="gs://dataflow-templates-us-central1/latest/flex/Cloud_Datastream_to_BigQuery" \
+        --enable-streaming-engine \
+        --parameters \
+inputFilePattern="gs://${PROJECT_ID}/data/",\
+gcsPubSubSubscription="projects/${PROJECT_ID}/subscriptions/datastream-subscription",\
+outputProjectId="${PROJECT_ID}",\
+outputStagingDatasetTemplate="dataset",\
+outputDatasetTemplate="dataset",\
+outputStagingTableNameTemplate="{_metadata_schema}_{_metadata_table}_log",\
+outputTableNameTemplate="{_metadata_schema}_{_metadata_table}",\
+deadLetterQueueDirectory="gs://${PROJECT_ID}/dlq/",\
+maxNumWorkers=2,\
+autoscalingAlgorithm="THROUGHPUT_BASED",\
+mergeFrequencyMinutes=2,\
+inputFileFormat="avro"
+
+
+
+gcloud pubsub topics create datastream
+gcloud pubsub subscriptions create datastream-subscription --topic=datastream
+gsutil notification create -f "json" -p "data/" -t "datastream" "gs://shailesh-uscentral-1"
+
+gsutil notification create -f "json" -p "data/" -t "datastream" "gs://shailesh-uscentral-1"
+
+gsutil notification create -f "json" -t "datastream" "gs://shailesh-datastreams"
+
+gcloud services enable dataflow.googleapis.com
+
+export PROJECT_ID=shailesh-1
+
+gcloud beta dataflow flex-template run datastream-replication \
+        --project="${PROJECT_ID}" --region="us-central1" \
+        --template-file-gcs-location="gs://dataflow-templates-us-central1/latest/flex/Cloud_Datastream_to_BigQuery" \
+        --enable-streaming-engine \
+        --parameters \
+inputFilePattern="gs://shailesh-datastreams/",\
+gcsPubSubSubscription="projects/${PROJECT_ID}/subscriptions/datastream-subscription",\
+outputProjectId="${PROJECT_ID}",\
+outputStagingDatasetTemplate="dataset",\
+outputDatasetTemplate="dataset",\
+outputStagingTableNameTemplate="{_metadata_schema}_{_metadata_table}_log",\
+outputTableNameTemplate="{_metadata_schema}_{_metadata_table}",\
+deadLetterQueueDirectory="gs://dataflow-staging-us-central1-664290125703/dlq/",\
+maxNumWorkers=2,\
+autoscalingAlgorithm="THROUGHPUT_BASED",\
+mergeFrequencyMinutes=2,\
+inputFileFormat="avro"
+
+
+{"container_id":"21f5352320398cfc2cdd290af7e4f082a453457b7404c93f1b1d0df82c08ef8f","severity":"INFO","time":"2021/12/21 14:49:44.995612",
+"line":"exec.go:38","message":"Executing: java -cp /template/datastream-to-bigquery/*:/template/datastream-to-bigquery/libs/*:/template/datastream-to-bigquery/classes com.google.cloud.teleport.v2.templates.DataStreamToBigQuery 
+--region=us-central1 --outputProjectId=shailesh-1 --maxNumWorkers=2 --project=shailesh-1 --jobName=datastream-replication 
+--stagingLocation=gs://dataflow-staging-us-central1-664290125703/staging 
+--templateLocation=gs://dataflow-staging-us-central1-664290125703/staging/template_launches/2021-12-21_06_48_59-7063673417219263830/job_object 
+--outputStagingTableNameTemplate={_metadata_schema}_{_metadata_table}_log 
+--autoscalingAlgorithm=THROUGHPUT_BASED --gcsPubSubSubscription=projects/shailesh-1/subscriptions/datastream-subscription 
+--enableStreamingEngine=true --inputFileFormat=avro --runner=DataflowRunner 
+--labels={\n   \"goog-dataflow-provided-template-name\" : \"cloud_datastream_to_bigquery\",\n   \"goog-dataflow-provided-template-type\" : \"flex\"\n}\n 
+--deadLetterQueueDirectory=gs://dataflow-staging-us-central1-664290125703/dlq/ --outputTableNameTemplate={_metadata_schema}_{_metadata_table} 
+--inputFilePattern=gs://shailesh-datastreams/ --outputStagingDatasetTemplate=dataset --mergeFrequencyMinutes=2 --serviceAccount=664290125703-compute@developer.gserviceaccount.com 
+--tempLocation=gs://dataflow-staging-us-central1-664290125703/tmp --outputDatasetTemplate=dataset"}
+
+
+
+https://github.com/GoogleCloudPlatform/DataflowTemplates/tree/main/v2/datastream-to-spanner
+
+
+
+export JOB_NAME="${IMAGE_NAME}-`date +%Y%m%d-%H%M%S-%N`"
+gcloud beta dataflow flex-template run ${JOB_NAME} \
+        --project=${PROJECT} --region=us-central1 \
+        --template-file-gcs-location=${TEMPLATE_IMAGE_SPEC} \
+        --parameters instanceId=${INSTANCE_ID},databaseId=${DATABASE_ID},inputFilePattern=${GCS_LOCATION},outputDeadletterTable=${DEADLETTER_TABLE}
+
+
+
+datastream oracle to BQ
+
+gcloud pubsub topics create datastream
+gcloud pubsub subscriptions create datastream-subscription --topic=datastream
+gsutil notification create -f "json" -p "data/" -t "datastream" "gs://shailesh-ds1"
+
+gsutil mb gs://shailesh-ds1
+
+
+export PROJECT_ID=shailesh-1
+
+gcloud beta dataflow flex-template run datastream-replication \
+        --project="${PROJECT_ID}" --region="us-central1" \
+        --template-file-gcs-location="gs://dataflow-templates-us-central1/latest/flex/Cloud_Datastream_to_BigQuery" \
+        --enable-streaming-engine \
+        --parameters \
+inputFilePattern="gs://shailesh-ds1/data/",\
+gcsPubSubSubscription="projects/${PROJECT_ID}/subscriptions/datastream-subscription",\
+outputProjectId="${PROJECT_ID}",\
+outputStagingDatasetTemplate="dataset",\
+outputDatasetTemplate="dataset",\
+outputStagingTableNameTemplate="{_metadata_schema}_{_metadata_table}_log",\
+outputTableNameTemplate="{_metadata_schema}_{_metadata_table}",\
+deadLetterQueueDirectory="gs://dataflow-staging-us-central1-664290125703/dlq/",\
+maxNumWorkers=2,\
+autoscalingAlgorithm="THROUGHPUT_BASED",\
+mergeFrequencyMinutes=2,\
+inputFileFormat="avro"
+
+
+
+
+
+gcloud beta dataflow flex-template run JOB_NAME \
+    --project=PROJECT_ID \
+    --region=REGION_NAME \
+    --template-file-gcs-location=gs://dataflow-templates/VERSION/flex/Datastream_to_CloudSpanner \
+    --parameters \
+inputFilePattern=GCS_FILE_PATH,\
+streamName=STREAM_NAME,\
+instanceId=CLOUDSPANNER_INSTANCE,\
+databaseId=CLOUDSPANNER_DATABASE,\
+deadLetterQueueDirectory=DLQ
+
+
+
+gcloud beta dataflow flex-template run ora2span1 \
+    --project="shailesh-1" \
+    --region="us-central1" \
+    --template-file-gcs-location="gs://dataflow-templates/latest/flex/Cloud_Datastream_to_Spanner" \
+    --parameters \
+inputFilePattern="gs://shailesh-ds1/data1/",\
+streamName="ora2span1",\
+instanceId="quiz-instance",\
+databaseId="quiz-database",\
+deadLetterQueueDirectory="gs://dataflow-staging-us-central1-664290125703/dlq/"
+
+
+
+
+
