@@ -1,0 +1,5 @@
+./cloud_sql_proxy -instances=INSTANCE_CONNECTION_NAME=tcp:0.0.0.0:PORT
+
+
+./cloud_sql_proxy -instances=shailesh-1:asia-south1:mymart=tcp:0.0.0.0:3306
+
