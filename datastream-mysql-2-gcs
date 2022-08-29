@@ -9,3 +9,7 @@ https://github.com/datacharmer/test_db
 
 ./cloud_sql_proxy -instances=shailesh-1:asia-south1:mymart=tcp:0.0.0.0:3306
 
+
+
+insert into departments (dept_no,dept_name) values('d101','newdept1' );
+
