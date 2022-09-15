@@ -11,50 +11,7 @@ https://github.com/datacharmer/test_db
 
 ./cloud_sql_proxy -instances=shailesh-1:asia-south1:mymart=tcp:0.0.0.0:3306
 
-./cloud_sql_proxy -instances=shailesh-1:asia-south1:pg-db11=tcp:0.0.0.0:5431
 
-
-CREATE PUBLICATION MY_PUBLICATION FOR ALL TABLES;
-SELECT PG_CREATE_LOGICAL_REPLICATION_SLOT('XBY','PGOUTPUT');
-
-dvdrental=> select * from pg_replication_slots;
- slot_name |  plugin  | slot_type | datoid | database  | temporary | active | active_pid | xmin | catalog_xmin | restart_lsn | confirmed_flush_lsn
------------+----------+-----------+--------+-----------+-----------+--------+------------+------+--------------+-------------+---------------------
- debezium  | wal2json | logical   |  16691 | dvdrental | f         | f      |            |      |       258729 | 1/458EBDD0  | 1/45A7A578
-(1 row)
-
-dvdrental=> select * from pg_publication;
- pubname | pubowner | puballtables | pubinsert | pubupdate | pubdelete
----------+----------+--------------+-----------+-----------+-----------
-(0 rows)
-
-dvdrental=> CREATE PUBLICATION MY_PUBLICATION FOR ALL TABLES;
-CREATE PUBLICATION
-dvdrental=> select * from pg_publication;
-    pubname     | pubowner | puballtables | pubinsert | pubupdate | pubdelete
-----------------+----------+--------------+-----------+-----------+-----------
- my_publication |    16388 | t            | t         | t         | t
-(1 row)
-
-dvdrental=> select * from pg_publication;
-    pubname     | pubowner | puballtables | pubinsert | pubupdate | pubdelete
-----------------+----------+--------------+-----------+-----------+-----------
- my_publication |    16388 | t            | t         | t         | t
-(1 row)
-
-dvdrental=>
-
-dvdrental=> select pg_create_logical_replication_slot('abc','pgoutput');
- pg_create_logical_replication_slot
-------------------------------------
- (abc,1/47BD22D0)
-(1 row)
-
-dvdrental=>
-
-select * from accounts limit 10;
-
-update accounts set password='chang1' where user_id=2;
 
 
 insert into departments (dept_no,dept_name) values('d101','newdept1' );
