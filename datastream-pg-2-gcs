@@ -42,3 +42,50 @@ dvdrental=>
 select * from accounts limit 10;
 
 update accounts set password='chang1' where user_id=2;
+
+
+
+export PROJECT_ID=shailesh-1
+
+gcloud beta dataflow flex-template run datastream-replication \
+        --project="${PROJECT_ID}" --region="us-central1" \
+        --template-file-gcs-location="gs://dataflow-templates-us-central1/latest/flex/Cloud_Datastream_to_BigQuery" \
+        --enable-streaming-engine \
+        --parameters \
+inputFilePattern="gs://shailesh-ds1/data/",\
+gcsPubSubSubscription="projects/${PROJECT_ID}/subscriptions/datastream-subscription",\
+outputProjectId="${PROJECT_ID}",\
+outputStagingDatasetTemplate="dataset",\
+outputDatasetTemplate="dataset",\
+outputStagingTableNameTemplate="{_metadata_schema}_{_metadata_table}_log",\
+outputTableNameTemplate="{_metadata_schema}_{_metadata_table}",\
+deadLetterQueueDirectory="gs://dataflow-staging-us-central1-664290125703/dlq/",\
+maxNumWorkers=2,\
+autoscalingAlgorithm="THROUGHPUT_BASED",\
+mergeFrequencyMinutes=2,\
+inputFileFormat="avro"
+
+
+
+export PROJECT_ID=shailesh-1
+
+gcloud beta dataflow flex-template run datastream-replication \
+        --project="${PROJECT_ID}" --region="asia-south1" \
+        --template-file-gcs-location="gs://dataflow-templates-us-central1/latest/flex/Cloud_Datastream_to_BigQuery" \
+        --enable-streaming-engine \
+        --parameters \
+inputFilePattern="gs://shailesh-ds1/data/",\
+gcsPubSubSubscription="projects/${PROJECT_ID}/subscriptions/datastream-subscription",\
+outputProjectId="${PROJECT_ID}",\
+outputStagingDatasetTemplate="dataset",\
+outputDatasetTemplate="dataset",\
+outputStagingTableNameTemplate="{_metadata_schema}_{_metadata_table}_log",\
+outputTableNameTemplate="{_metadata_schema}_{_metadata_table}",\
+deadLetterQueueDirectory="gs://dataflow-staging-us-central1-664290125703/dlq/",\
+maxNumWorkers=2,\
+autoscalingAlgorithm="THROUGHPUT_BASED",\
+mergeFrequencyMinutes=2,\
+inputFileFormat="avro"
+
+
+
