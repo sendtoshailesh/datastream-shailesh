@@ -71,10 +71,10 @@ export PROJECT_ID=shailesh-1
 
 gcloud beta dataflow flex-template run datastream-replication \
         --project="${PROJECT_ID}" --region="asia-south1" \
-        --template-file-gcs-location="gs://dataflow-templates-us-central1/latest/flex/Cloud_Datastream_to_BigQuery" \
+        --template-file-gcs-location="gs://dataflow-templates-asia-south1/latest/flex/Cloud_Datastream_to_BigQuery" \
         --enable-streaming-engine \
         --parameters \
-inputFilePattern="gs://shailesh-ds1/data/",\
+inputFilePattern="gs://datastream-mumbai-shailesh/data20220915/",\
 gcsPubSubSubscription="projects/${PROJECT_ID}/subscriptions/datastream-subscription",\
 outputProjectId="${PROJECT_ID}",\
 outputStagingDatasetTemplate="dataset",\
