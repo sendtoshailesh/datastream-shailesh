@@ -70,7 +70,9 @@ CREATE TABLE orders (
   CONSTRAINT orders_pk PRIMARY KEY (order_id)
 );
 
+insert into orders (order_id,order_date,quantity,notes) values(100,current_date,23,'This is first order');
 
+select * from orders;
 
 export PROJECT_ID=shailesh-1
 
