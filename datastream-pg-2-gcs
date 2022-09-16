@@ -54,6 +54,22 @@ select * from accounts where user_id=2;
 
 update accounts set password='chang1' where user_id=2;
 
+alter table accounts add notes1 varchar(100);
+
+update accounts set password='chang12',notes1='About it' where user_id=2;
+
+alter table accounts drop notes1;
+
+update accounts set password='chang13' where user_id=2;
+
+CREATE TABLE orders ( 
+  order_id integer NOT NULL,
+  order_date date,
+  quantity integer,
+  notes varchar(200),
+  CONSTRAINT orders_pk PRIMARY KEY (order_id)
+);
+
 
 
 export PROJECT_ID=shailesh-1
