@@ -1,4 +1,13 @@
-      ./cloud_sql_proxy -instances=shailesh-1:asia-south1:pg-db11=tcp:0.0.0.0:5431
+wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
+chmod +x cloud_sql_proxy
+
+nohup ./cloud_sql_proxy -instances=shailesh-1:asia-south1:pg-db11=tcp:0.0.0.0:5431 &
+
+for AlloyDB
+==================
+wget https://storage.googleapis.com/alloydb-auth-proxy/v0.2.0/alloydb-auth-proxy.linux.amd64 -O alloydb-auth-proxy
+chmod +x alloydb-auth-proxy
+./alloydb-auth-proxy "projects/shailesh-1/locations/us-central1/clusters/sh-alloy1/instances/alloy-sh?port=5000"
 
 
 CREATE PUBLICATION MY_PUBLICATION FOR ALL TABLES;
