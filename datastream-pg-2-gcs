@@ -50,6 +50,8 @@ dvdrental=>
 
 select * from accounts limit 10;
 
+select * from accounts where user_id=2;
+
 update accounts set password='chang1' where user_id=2;
 
 
